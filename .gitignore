@@ -1,0 +1,11 @@
+target
+.classpath
+.project
+.settings
+.cache*
+.idea
+*.iml
+/.idea_modules
+/.history
+/logs
+/RUNNING_PID
