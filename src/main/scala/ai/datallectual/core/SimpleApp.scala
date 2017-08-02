@@ -105,6 +105,15 @@ object SimpleApp {
     println("Tuple consisting of aggregation of dep_delay and count ", delayedDeparture._1 + "," + delayedDeparture._2)
     println("Average delayed departure in US ", delayedDeparture._1/delayedDeparture._2)
 
+    //Let us do some airport statistics
+    println("Create a map of origin and delay")
+    val delayAtAirports = parsedFlights.map(flightData => (flightData.origin,flightData.dep_delay))
+
+    val totalDelayAtAirport = delayAtAirports.reduceByKey((x,y) => x+y)
+    println("Few dealys at various airport")
+    totalDelayAtAirport.take(10).foreach(x => println(x._1  + ","+ x._2))
+
+
   }
 
   def noHeader(row: String) : Boolean ={
