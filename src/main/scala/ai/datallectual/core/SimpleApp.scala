@@ -19,9 +19,10 @@ object SimpleApp {
 
     println("sc1" + sc )
 
-    val airlinesPath="/home/user/Downloads/InstallGuideAndSourceCode/InstallGuideAndSourceCode/Datasets/FlightsData/airlines.csv"
-    val airportsPath="/home/user/Downloads/InstallGuideAndSourceCode/InstallGuideAndSourceCode/Datasets/FlightsData/airports.csv"
-    val flightsPath= "/home/user/Downloads/InstallGuideAndSourceCode/InstallGuideAndSourceCode/Datasets/FlightsData/flights.csv"
+
+    val airlinesPath="airlines.csv"
+    val airportsPath="airports.csv"
+    val flightsPath= "flights.csv"
 
     // Load one dataset
     val airlines=sc.textFile(airlinesPath)
@@ -53,19 +54,6 @@ object SimpleApp {
 
     val airLinesWithIntData = airlineNoHeader.map(_.replace("\"","")).map(_.split(',')).map(x => ( x(0).toInt,x(1)) )
     airLinesWithIntData.take(10).foreach(println)
-
-
-    //Let us read text file in scala to read words in the file
-    //val words = sc.textFile("/home/user/Desktop/DecisionTree-NC.html").flatMap(_.split(" "))
-    //println("Count of words " + words.count() )
-    //val wordFrequency= words.map(word => (word,1)).reduceByKey( {case(x,y) => x+y})
-    //val wordFrequency= words.map(word => (word,1)).reduceByKey( _+_)
-    //wordFrequency.take(10).foreach(println)
-
-    println("Word Frequency for a text file Using spark")
-    val mapOfWordAndCount = sc.textFile("/home/user/Desktop/aws-credential.txt").flatMap(_.split(" ")).map(x => (x,1)).reduceByKey(_+_)
-    val mostFrequestWords = mapOfWordAndCount.sortBy( {-_._2})
-    mostFrequestWords.take(10).foreach(println)
 
     println("Printing data from flights file ")
     val flights=sc.textFile(flightsPath)
