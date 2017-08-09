@@ -71,10 +71,10 @@ object SparkStatsWithRDD {
     /*
     Now to calculate Aveage delpay per airport we have to use join operation on above
     two pair RDDs airportTotalDelayRDD,airportsDelayedFligtsRDD
-    1) airportTotalDelayRDD => key is airport value is total delays
-    2) airportsDelayedFligtsRDD ==> key is airport value is total fligts
-    To do : create a Join(inner join) between these two rdds this opera tion
-    will create new rdd with key as airport value is tuple of total delays and total flight
+    1) airportTotalDelayRDD => key is airport and value is total delays
+    2) airportsDelayedFligtsRDD ==> key is airport and value is total flights
+    To do : create a Join(inner join) between these two rdds this operation
+    will create new rdd with key as airport and value is a tuple of total delays and total flights
      */
 
     val airportsDelaysAndCounts = airportTotalDelayRDD.join(airportsDelayedFligtsRDD)
@@ -86,16 +86,64 @@ object SparkStatsWithRDD {
     //Use interpolation to print 10 records airport and delays
     airportAvgDelays.take(10).foreach( x =>{ println(f"${x._1}%s has average delay of ${x._2}%f") })
 
+    //Top 10 airports with highest average delays
+    //sort the values in airportAvgDelays RDD  - remember sort default is ascending sort
+
+    println("Top 10 Average delays by airports")
+    airportAvgDelays.sortBy(-_._2).take(10).foreach(record =>  { println(f"${record._1}%s has average delay of ${record._2}%f")})
+
     /*
     Now use combineByKey to achieve same results\
-    There are 3 parts to combineByKey fucntion
+    There are 3 parts to combineByKey function
     1. CreateCombiner
     2. merge function
     3.Shuffle is performed
     4.merge combiners
+
+    Create Combiner is a default function that gets applied when spark encounters key for the first time
+    Merge function is used to combine values with the same key in given partition (No cross partition action at this time)
+    Shuffle function is used to bring same keys to single partition.
+    Merge combiners will combine the values with same key
      */
 
-    
+    val avgFlightSumAndCount = airportAvgDelays.combineByKey(
+                                                  /*Create Combiner */
+                                                  value => (value,1),
+                                                  /*Merge function happens on same partition*/
+                                                  (record :(Double,Int), value) => (record._1+value,record._2+1),
+                                                  /* Shuffle operation to bring keys in same partition*/
+                                                  /* Merge combiner*/
+                                                  (record1 :(Double,Int), record2 :(Double,Int)) => (record1._1 + record2._1 , record1._2+record2._2))
+
+
+    println("Airport with average flight delays")
+
+    val airportAvgDelaysCombineBy = avgFlightSumAndCount.mapValues(x=> x._1/x._2)
+    airportAvgDelaysCombineBy.sortBy(-_._2).take(10).foreach(record =>  { println(f"${record._1}%s has average delay of ${record._2}%f")})
+
+
+    val airportsPairRDD = sc.textFile(airportsPath).filter(SimpleApp.noHeader).map(parseLookup)
+
+    airportsPairRDD.take(10).foreach( x => { println(f" ${x._1}%s and description is ${x._2}%s") })
+
+    /*
+    Now that we have airportPairRDD - we can lookup airportPairRDD to get the description of the airport
+    This can be done just as using a map operation - CollectAsMap -closure scala concepts used here.
+    Spark also provides broadcast variables
+     */
+
+    val airportLookup=airportsPairRDD.collectAsMap
+
+    println("Description of CLI is ",  airportLookup("CLI"))
+
+
+
+
+  }
+
+  def parseLookup(row: String) : (String,String) = {
+    val x = row.replace("\"","").split(",")
+    (x(0),x(1))
   }
 
 
