@@ -132,11 +132,21 @@ object SparkStatsWithRDD {
     Spark also provides broadcast variables
      */
 
-    val airportLookup=airportsPairRDD.collectAsMap
+    val airportLookupRDD=airportsPairRDD.collectAsMap
 
-    println("Description of CLI is ",  airportLookup("CLI"))
+    println("Description of CLI is ",  airportLookupRDD("CLI"))
 
+    /*
+    Broadcast airportLookupRDD to all nodes - so that lookup operation becomes faster
+     */
+    val airportBCRDD=sc.broadcast(airportLookupRDD)
 
+    /*
+    Now  get top 10 airports with highest delays
+     */
+
+    airportAvgDelays.map(x => (airportBCRDD.value(x._1),x._2)).
+                                  sortBy(-_._2).take(10).foreach(record =>  { println(f"${record._1}%s has average delay of ${record._2}%f")})
 
 
   }
