@@ -145,8 +145,9 @@ object SparkStatsWithRDD {
     Now  get top 10 airports with highest delays
      */
 
-    airportAvgDelays.map(x => (airportBCRDD.value(x._1),x._2)).
-                                  sortBy(-_._2).take(10).foreach(record =>  { println(f"${record._1}%s has average delay of ${record._2}%f")})
+    airportAvgDelays.map(x => (airportBCRDD.value(x._1),x._2))
+                                  .sortBy(-_._2).take(10)
+                                  .foreach(record =>  { println(f"${record._1}%s has average delay of ${record._2}%f")})
 
 
   }
