@@ -1,8 +1,7 @@
-# spark-ml
 
 This repo is for spark-ml on local machine.
 
-Purpose of this experiment is :
+<B> Purpose of this repo is : </B>
 
 1) To help setup intelliJ to work with spark and scala.
 
@@ -35,8 +34,5 @@ Problem no :2
 Description : Predicting Airline Delays using machine learning spark-ml.
 
 Solution : Work in progress coming soon.
-
-
-
 
 
