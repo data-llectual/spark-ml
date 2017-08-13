@@ -32,7 +32,7 @@ For Soultion follow along the code - there is lot of comments.
 
 Problem no :2
 
-Description : Predicting Airline Delays using machine learnining spark-ml.
+Description : Predicting Airline Delays using machine learning spark-ml.
 
 Solution : Work in progress coming soon.
 
