@@ -1,18 +1,38 @@
-# spark-ml
 
 This repo is for spark-ml on local machine.
 
-<B> Purpose of this experiment is : </B>
+<B> Purpose of this repo is : </B>
+
 1) To help setup intelliJ to work with spark and scala.
 
 2) To solve machine learning problems using spark-ml.
 
+Setting up projects on  local machine :
 
-<B>Steps to follow:</B>
-1) clone following repository to local machine : https://github.com/data-llectual/spark-ml.git
-2) git clone https://github.com/data-llectual/spark-ml.git
-3) Go to IntelliJ say Open project select pom.xml location from #2
-4) Make changes and run.
-5) Good luck.
+1) git clone https://github.com/data-llectual/spark-ml.git
+
+2) Go to IntelliJ say Open project select pom.xml location from #2
+
+3) Make changes and run.
+
+4) Good luck.
+
+Problem no :1
+
+Description : Descriptive analytics of US DOT flights data - year analyzed 2014. 
+
+1) Data files part of the source (Note : Data can be sourced from hdfs, s3 or any alternatives stores)
+2) Calculate total delays in US.
+3) Calculate average delays in US.
+4) Calculate average delays per airports in US.
+5) Calculate Top Ten airports with maximum delays.
+
+For Soultion follow along the code - there is lot of comments.
+
+Problem no :2
+
+Description : Predicting Airline Delays using machine learning spark-ml.
+
+Solution : Work in progress coming soon.
 
 
